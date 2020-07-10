@@ -227,6 +227,15 @@ public class SwiftSoundStreamPlugin: NSObject, FlutterPlugin {
             try AVAudioSession.sharedInstance().setActive(true)
         } catch { }
     }
+
+    private func resetAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(
+            AVAudioSession.Category.playback
+            )
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch { }
+    }
     
     private func startRecording(_ result: @escaping FlutterResult) {
         configureAudioSession()
@@ -239,6 +248,7 @@ public class SwiftSoundStreamPlugin: NSObject, FlutterPlugin {
     private func stopRecording(_ result: @escaping FlutterResult) {
         mAudioEngine.inputNode.removeTap(onBus: mRecordBus)
         sendRecorderStatus(SoundStreamStatus.Stopped)
+        resetAudioSession();
         result(true)
     }
     
